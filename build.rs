@@ -26,7 +26,7 @@ fn walk_dir_recursive(dir: &Path) -> Vec<PathBuf> {
 
 fn main() {
 
-    //env::set_var("RUST_BACKTRACE", "1");
+   // env::set_var("RUST_BACKTRACE", "1");
 
     // Get current working directory
     let mut path = env::current_dir().unwrap();
@@ -45,11 +45,7 @@ fn main() {
 
     let schemas :Vec<PathBuf>= walk_dir_recursive(&path);
 
-
-
-
-
-
+    let  separator = if cfg!(windows) { "\\" } else { "/" };
 
     for path in schemas {
         if !path.clone().display().to_string().contains(".json") {
@@ -58,7 +54,6 @@ fn main() {
 
         //Check if the file is a json file
 
-        let  separator = if cfg!(windows) { "\\" } else { "/" };
         let content = std::fs::read_to_string(path.clone()).unwrap();
 
         let mut path = path
@@ -75,12 +70,13 @@ fn main() {
             continue;
         }
 
-        let schema: Value =match  serde_json::from_str(&content) {
+        let schema: Value = match  serde_json::from_str(&content) {
             Ok(s) => s,
             Err(e) => {
                 println!("Error parsing json: {}", e);
                 continue;
-        }};
+            }
+        };
 
         // check if the json is a schema
         if schema.get("$schema").is_none() {
@@ -90,7 +86,9 @@ fn main() {
         let file_name = path.pop().unwrap().to_string();
 
         let mut path_new =
-            Path::new(&format!(".{}src{}", separator.clone(), separator.clone())).to_path_buf();
+            Path::new(&format!(".{}src{}schemas{}", separator.clone(), separator.clone(), separator.clone())).to_path_buf();
+
+
 
         for p in path.iter() {
             path_new.push(p);
@@ -105,17 +103,40 @@ fn main() {
 
         path_new.push(file_name.replace(".json", ".rs"));
         println!("Writing to: {}", path_new.display());
+
+
+        let mut mod_file = path_new.clone();
+        mod_file.pop();
+        mod_file.push("mod.rs");
+
+
+        // Check if the mod file exists recursively
+
+        if mod_file.exists() {
+            let mut contents = fs::read_to_string(mod_file.clone()).unwrap();
+            let mut new_mod_file = format!("pub mod {};", file_name.replace(".json", ""));
+            if !contents.contains(&new_mod_file) {
+                contents.push_str(&new_mod_file);
+                fs::write(mod_file, contents).unwrap();
+            }
+        } else {
+            let mut new_mod_file = format!("pub mod {};", file_name.replace(".json", ""));
+            fs::write(mod_file, new_mod_file).unwrap();
+        }
+
+
+
+
+
+
         let schema = serde_json::from_str::<schemars::schema::RootSchema>(&content).unwrap();
-
         let mut type_space = TypeSpace::new(TypeSpaceSettings::default().with_struct_builder(true));
-
         match type_space.add_ref_types(schema.definitions) {
             Ok(_) => {}
             Err(e) => {
                 println!("Error adding ref types: {}", e);
             }
         }
-
 
 
         let base_type = &schema.schema;
@@ -134,6 +155,52 @@ fn main() {
             "use serde::{Deserialize, Serialize};",
             type_space.to_string()
         );
+
+
         fs::write(path_new, contents).unwrap();
+    }
+
+
+    // generate the lib.rs file
+    // and the nested mod.rs files
+    let mut path_new =
+    Path::new(&format!(".{}src{}schemas{}", separator.clone(), separator.clone(), separator.clone())).to_path_buf();
+
+    // Get the list of all directories in the schemas directory recursively
+
+    let mut directories: Vec<PathBuf> = Vec::new();
+
+    for entry in fs::read_dir(path_new.clone()).unwrap() {
+        let entry = entry.unwrap();
+        let path = entry.path();
+        if path.is_dir() {
+            directories.push(path);
+        }
+    }
+
+    // generate the mod.rs files
+
+    for directory in directories {
+        let mut mod_file = directory.clone();
+        mod_file.push("mod.rs");
+
+        let mut contents = String::new();
+
+        for entry in fs::read_dir(directory.clone()).unwrap() {
+            let entry = entry.unwrap();
+            let path = entry.path();
+            if path.is_dir() {
+                continue;
+            }
+
+            let file_name = path.file_name().unwrap().to_str().unwrap().to_string();
+
+            if file_name.ends_with(".rs") {
+                contents.push_str(&format!("pub mod {};", file_name.replace(".rs", "")));
+            }
+        }
+
+        fs::write(mod_file, contents).unwrap();
+
     }
 }

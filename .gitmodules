@@ -1,8 +1,6 @@
-
 [submodule "Minecraft-bedrock-json-schemas"]
 	path = Minecraft-bedrock-json-schemas
 	url = https://github.com/Blockception/Minecraft-bedrock-json-schemas.git
-
 [submodule "typify"]
 	path = typify
 	url = https://github.com/oxidecomputer/typify.git
