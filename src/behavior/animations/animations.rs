@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-
 #[doc = "Molang definition."]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct A(pub String);
