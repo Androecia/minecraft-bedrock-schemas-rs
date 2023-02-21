@@ -43,9 +43,6 @@ fn main() {
         .filter(|c| c.as_os_str().to_str().unwrap() != "Minecraft-bedrock-json-schemas")
         .count();
 
-    println!("Path segments to remove: {}", n_path_segments_to_remove);
-
-
     let schemas :Vec<PathBuf>= walk_dir_recursive(&path);
 
 
