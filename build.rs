@@ -25,19 +25,34 @@ fn walk_dir_recursive(dir: &Path) -> Vec<PathBuf> {
 }
 
 fn main() {
+
     //env::set_var("RUST_BACKTRACE", "1");
 
+    // Get current working directory
+    let mut path = env::current_dir().unwrap();
+    path.push( "Minecraft-bedrock-json-schemas");
 
-
-    let schemas :Vec<PathBuf>= walk_dir_recursive(Path::new(
-        "C:\\Users\\miner\\OneDrive\\Documents\\GitHub\\Androecia\\FriendConnect-rs\\minecraft-bedrock-schemas-rs\\Minecraft-bedrock-json-schemas",
-    ));
     let ignored_root_directories = vec!["source", "test", "tools", ".github", ".vscode", "src"];
 
-    // TODO: Make this an ENV variable
-    let n_path_segments_to_remove: u8 = 10;
 
-    //let  paths: Vec<String> = Vec::new();
+
+    // find the amount of path segments to remove from the path from the current working directory to the schemas directory
+
+    let n_path_segments_to_remove = path
+        .components()
+        .filter(|c| c.as_os_str().to_str().unwrap() != "Minecraft-bedrock-json-schemas")
+        .count();
+
+    println!("Path segments to remove: {}", n_path_segments_to_remove);
+
+
+    let schemas :Vec<PathBuf>= walk_dir_recursive(&path);
+
+
+
+
+
+
 
     for path in schemas {
         if !path.clone().display().to_string().contains(".json") {
