@@ -159,48 +159,5 @@ fn main() {
 
         fs::write(path_new, contents).unwrap();
     }
-
-
-    // generate the lib.rs file
-    // and the nested mod.rs files
-    let mut path_new =
-    Path::new(&format!(".{}src{}schemas{}", separator.clone(), separator.clone(), separator.clone())).to_path_buf();
-
-    // Get the list of all directories in the schemas directory recursively
-
-    let mut directories: Vec<PathBuf> = Vec::new();
-
-    for entry in fs::read_dir(path_new.clone()).unwrap() {
-        let entry = entry.unwrap();
-        let path = entry.path();
-        if path.is_dir() {
-            directories.push(path);
-        }
-    }
-
-    // generate the mod.rs files
-
-    for directory in directories {
-        let mut mod_file = directory.clone();
-        mod_file.push("mod.rs");
-
-        let mut contents = String::new();
-
-        for entry in fs::read_dir(directory.clone()).unwrap() {
-            let entry = entry.unwrap();
-            let path = entry.path();
-            if path.is_dir() {
-                continue;
-            }
-
-            let file_name = path.file_name().unwrap().to_str().unwrap().to_string();
-
-            if file_name.ends_with(".rs") {
-                contents.push_str(&format!("pub mod {};", file_name.replace(".rs", "")));
-            }
-        }
-
-        fs::write(mod_file, contents).unwrap();
-
-    }
 }
+
