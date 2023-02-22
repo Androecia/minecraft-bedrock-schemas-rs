@@ -1,5 +1,5 @@
 use crate::{command::Command, general::identifier::Identifier};
-use crate::general::format_version::FormatVersion;
+use crate::general::version::Version;
 use crate::molang::molang::Molang;
 
 use serde::{
@@ -185,7 +185,6 @@ use serde::{
 /// if the molang is None then the output of the animation is the name of the animation itself. If the molang is Some then the output of the animation is the result of the molang in a key that is the name and the value which is the molang as a string.
 struct Animation {
     name: String,
-
     molang: Option<Molang>,
 }
 
@@ -309,7 +308,7 @@ impl Serialize for Transition {
 use std::{collections::HashMap, fmt};
 /// Animation controller for behaviors.
 struct AnimationControllers {
-    format_version: FormatVersion,
+    format_version: Version,
 
     /// The animation controllers schema for.
     /// The key is the name of the animation controller.
@@ -319,7 +318,7 @@ struct AnimationControllers {
 impl AnimationControllers {
     /// # Arguments
     /// * `format_version` - The format version of the animation controller.
-    pub fn new(format_version: FormatVersion) -> Self {
+    pub fn new(format_version: Version) -> Self {
         Self {
             format_version,
             animation_controllers: HashMap::new(),

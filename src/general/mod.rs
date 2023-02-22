@@ -1,2 +1,2 @@
-pub mod format_version;
+pub mod version;
 pub mod identifier;

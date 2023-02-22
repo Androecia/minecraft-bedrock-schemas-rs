@@ -4,7 +4,7 @@ pub struct Event {
     identifier: Identifier,
 }
 impl Event {
-  pub fn get_identifier(&self) -> Identifier {
-      self.identifier
+  pub fn get_identifier(&self) -> &Identifier {
+      &self.identifier
   }
 }

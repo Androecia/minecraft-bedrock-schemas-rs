@@ -127,7 +127,7 @@
 }
  */
 
-use crate::general::format_version::FormatVersion;
+use crate::general::version::Version;
 
 
 use serde::{Deserialize, Serialize};
@@ -136,7 +136,7 @@ use serde::{Deserialize, Serialize};
 ///
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 struct  Dialogue {
-    format_version: FormatVersion,
+    format_version: Version,
 
     /// The different scenes.
     #[serde(rename = "minecraft:npc_dialogue")]
