@@ -19,8 +19,8 @@ path = "src/lib.rs"
 serde = { version = "1.0.152", features = ["serde_derive"] }
 serde_json = "1.0.93"
 
-[build-dependencies]
-serde = "1.0.152"
-serde_json = "1.0.93"
-typify = {path = "./typify/typify"}
-schemars = "0.8.11"
+#[build-dependencies]
+#serde = "1.0.152"
+#serde_json = "1.0.93"
+#typify = {path = "./typify/typify"}
+#schemars = "0.8.11"
