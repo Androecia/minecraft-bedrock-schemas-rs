@@ -1,3 +1,3 @@
-pub use animation_controller;
+pub mod animation_controller;
 
 

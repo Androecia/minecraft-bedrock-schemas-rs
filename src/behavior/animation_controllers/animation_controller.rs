@@ -1,19 +1,11 @@
+use crate::{command::Command, general::identifier::Identifier};
+use crate::general::format_version::FormatVersion;
+use crate::molang::molang::Molang;
 
-use crate::molang::Molang;
-use crate::general::Version;
-use crate::command::Command;
-
-use serde::{Deserialize, Serialize};
-
-
-
-
-
-
-
-
-
-
+use serde::{
+    de::{self, MapAccess, Visitor},
+    Deserialize, Deserializer, Serialize, Serializer, ser::SerializeMap,
+};
 
 /*
 
@@ -190,34 +182,178 @@ use serde::{Deserialize, Serialize};
 }
  */
 
+/// if the molang is None then the output of the animation is the name of the animation itself. If the molang is Some then the output of the animation is the result of the molang in a key that is the name and the value which is the molang as a string.
+struct Animation {
+    name: String,
 
-struct Animation{}
+    molang: Option<Molang>,
+}
+
+impl Serialize for Animation {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        if let Some(molang) = &self.molang {
+            let mut map = serializer.serialize_map(Some(2))?;
+            map.serialize_entry(&self.name, &molang.to_string())?;
+            map.end()
+        } else {
+            serializer.serialize_str(&self.name)
+        }
+    }
+}
 
 
 
+
+
+impl Animation {
+    pub fn new(name: String, molang: Option<Molang>) -> Self {
+        Self { name, molang }
+    }
+}
+
+struct Locator {}
+
+struct ParticleEffect {
+    /// Set to false to have the effect spawned in the world without being bound to an actor (by default an effect is bound to the actor).
+    bind_to_actor: Option<bool>,
+
+    /// The name of a particle effect that should be played.
+    effect: String,
+
+    /// The name of a locator on the actor where the effect should be located.
+    locator: Locator,
+
+    /// A molang script that will be run when the particle emitter is initialized.
+    pre_effect_script: Molang,
+}
+
+struct AnimationController {
+    /// The states of this animation controller.
+    states: HashMap<String, AnimationState>,
+
+    /// The state to start with, if not specified state at position 0 in the array is used.
+    initial_state: Option<String>,
+}
+
+impl AnimationController {
+    pub fn new() -> Self {
+        Self {
+            states: HashMap::new(),
+            initial_state: None,
+        }
+    }
+
+    pub fn set_initial_state(&mut self, initial_state: String) {
+        self.initial_state = Some(initial_state);
+    }
+
+    pub fn set_state(&mut self, name: String, state: AnimationState) {
+        self.states.insert(name, state);
+    }
+
+    pub fn get_state(&self, name: &str) -> Option<&AnimationState> {
+        self.states.get(name)
+    }
+}
+
+struct AnimationState {
+    /// The animations definition for.
+    animations: Vec<Animation>,
+
+    /// Events, commands or transitions to preform on entry of this state.
+    on_entry: Vec<Commands>,
+
+    /// Events, commands or transitions to preform on exit of this state.
+    on_exit: Vec<Commands>,
+
+    /// The transition definition for.
+    transitions: Vec<Transition>,
+}
+/// same as animation but with a name and a molang instead of just a name when it comes to serialization and deserialization.
+struct Transition {
+    name: String,
+    molang: Molang,
+}
+impl Transition {
+    pub fn new(name: String, molang: Molang) -> Self {
+        Self { name, molang }
+    }
+}
+
+
+
+impl Serialize for Transition {
+  fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+  where
+      S: Serializer,
+  {
+      let mut map = serializer.serialize_map(Some(2))?;
+      map.serialize_entry(&self.name, &self.molang.to_string())?;
+      map.end()
+
+  }
+}
+
+
+
+
+
+
+
+
+
+
+use std::{collections::HashMap, fmt};
 /// Animation controller for behaviors.
 struct AnimationControllers {
-    format_version:Version,
-    animation_controllers:AnimationController
+    format_version: FormatVersion,
+
+    /// The animation controllers schema for.
+    /// The key is the name of the animation controller.
+    animation_controllers: HashMap<String,AnimationController>,
 }
 
+impl AnimationControllers {
+    /// # Arguments
+    /// * `format_version` - The format version of the animation controller.
+    pub fn new(format_version: FormatVersion) -> Self {
+        Self {
+            format_version,
+            animation_controllers: HashMap::new(),
+        }
+    }
 
+    /// # Arguments
+    /// * `name` - The name of the animation controller without the `controller.animation.` prefix.
+    /// * `animation_controller` - The animation controller.
 
+    pub fn set_animation_controller(
+        &mut self,
+        name: String,
+        animation_controller: AnimationController,
+    ) {
+        self.animation_controllers.insert(
+            format!("controller.animation.{}", name),
+            animation_controller,
+        );
+    }
+    /// # Arguments
+    /// * `name` - The name of the animation controller without the `controller.animation.` prefix.
+    /// * `animation_controller` - The animation controller.
+    pub fn remove_animation_controller(&mut self, name: String) {
+      self.animation_controllers
+      .remove(&format!("controller.animation.{}", name));
+    }
 
-struct Command  {}
+    pub fn get_animation_controllers(&self) -> &HashMap<String,AnimationController> {
+        &self.animation_controllers
+    }
 
-struct Event {
-    identifier:Identifier,
-}
-
-struct Identifier {
-    namespace:String,
-    path:String,
-}
-
-impl Event {
-    fn get_identifier (&self) -> Identifier {
-        self.identifier
+    pub fn get_animation_controller(&self, name: &str) -> Option<&AnimationController> {
+        self.animation_controllers.get(name)
     }
 }
 
@@ -225,18 +361,17 @@ impl Event {
 
 
 enum Commands {
-    Event(&Event),
+    Event(Identifier),
     Command(Command),
-    Molang(MoLang)
+    Molang(Molang),
 }
-
 
 impl ToString for Commands {
     fn to_string(&self) -> String {
         match self {
-            Commands::Event(event) => format!("@s {}",event.get_identifier().to_string()),
-            Commands::Command(command) => format!("/{}",command.to_string()),
-            Commands::Molang(molang) => molang.to_string()
+            Commands::Event(identifier) => format!("@s {}", identifier.to_string()),
+            Commands::Command(command) => format!("/{}", command.to_string()),
+            Commands::Molang(molang) => molang.to_string(),
         }
     }
 }
