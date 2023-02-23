@@ -133,8 +133,8 @@ use crate::general::version::Version;
 use serde::{Deserialize, Serialize};
 
 /// Specifies the dialogue of an npc.
-///
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+
+#[derive( Clone,Serialize, Deserialize)]
 struct  Dialogue {
     format_version: Version,
 
@@ -143,7 +143,7 @@ struct  Dialogue {
     npc_dialogue: NpcDialogue,
 }
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive( Clone, Serialize, Deserialize)]
 /// Specifies the dialogue of an npc.
 struct NpcDialogue {
 
@@ -152,7 +152,7 @@ struct NpcDialogue {
 }
 
 
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize,Clone)]
 /// A single scene specification.
 struct Scene {
 
@@ -234,9 +234,6 @@ impl Button {
     fn add_command(&mut self, command: Command) {
         self.commands.push(command);
     }
-
-
-
 
     fn get_commands(&self) -> &Vec<Command> {
         &self.commands
