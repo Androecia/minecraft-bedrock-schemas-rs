@@ -16,6 +16,8 @@ path = "src/lib.rs"
 
 
 [dependencies]
+regex = "1.7.1"
+regexp = "0.3.2"
 serde = { version = "1.0.152", features = ["serde_derive"] }
 serde_json = "1.0.93"
 walkdir = "2.3.2"
