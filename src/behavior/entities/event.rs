@@ -1,10 +1,10 @@
-use crate::general::identifier::Identifier;
+use crate::general::identifier::NamespaceIdentifier;
 
 pub struct Event {
-    identifier: Identifier,
+    identifier: NamespaceIdentifier,
 }
 impl Event {
-  pub fn get_identifier(&self) -> &Identifier {
+  pub fn get_identifier(&self) -> &NamespaceIdentifier {
       &self.identifier
   }
 }
