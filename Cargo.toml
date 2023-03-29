@@ -16,8 +16,11 @@ path = "src/lib.rs"
 
 
 [dependencies]
-serde = { version = "1.0.152", features = ["serde_derive"] }
+jsonschema = "0.17.0"
+schemars = { version = "0.8.12", features = ["rust_decimal","chrono", "uuid08", "smallvec"] }
+serde = { version = "1.0.152", features = ["serde_derive", "derive"] }
 serde_json = "1.0.93"
+syn = { version = "2.0.11", features = ["full"] }
 
 #[build-dependencies]
 #serde = "1.0.152"
