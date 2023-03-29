@@ -1,0 +1,28 @@
+/* Raw contents of slime_float.json That I want to use to make a rust Struct from this Json Schema:
+{
+  "$id": "blockception.minecraft.behavior.entities.minecraft.behavior.slime_float",
+  "additionalProperties": false,
+  "description": "Allow slimes to float in water / lava. Can only be used by Slime and Magma Cubes.",
+  "type": "object",
+  "title": "Slime Float",
+  "required": [],
+  "properties": {
+    "priority": { "$ref": "types/priority.json" },
+    "speed_multiplier": { "$ref": "types/speed_multiplier.json" },
+    "jump_chance_percentage": {
+      "type": "number",
+      "title": "Jump Chance Percentage",
+      "default": 0.8,
+      "description": "Percent chance a slime or magma cube has to jump while in water / lava."
+    }
+  },
+  "examples": [
+    {
+      "jump_chance_percentage": 0.0
+    }
+  ]
+}
+*/ use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SlimeFloat {}

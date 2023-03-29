@@ -1,0 +1,68 @@
+/* Raw contents of is_game_rule.json That I want to use to make a rust Struct from this Json Schema:
+{
+  "$id": "blockception.minecraft.behavior.entities.filters.is_game_rule",
+  "type": "object",
+  "title": "Is Game Rule",
+  "description": "Tests whether a named game rule is active.",
+  "required": ["domain", "value"],
+  "properties": {
+    "domain": {
+      "description": "The Game Rule to test.",
+      "title": "Domain",
+      "examples": [
+        "commandBlockOutput",
+        "commandBlocksEnabled",
+        "doDaylightCycle",
+        "doEntityDrops",
+        "doFireTick",
+        "doImmediateRespawn",
+        "doInsomnia",
+        "doMobLoot",
+        "doMobSpawning",
+        "doTileDrops",
+        "doWeatherCycle",
+        "drowningDamage",
+        "fallDamage",
+        "fireDamage",
+        "freezeDamage",
+        "functionCommandLimit",
+        "keepInventory",
+        "maxCommandChainLength",
+        "mobGriefing",
+        "naturalRegeneration",
+        "pvp",
+        "randomTickSpeed",
+        "respawnblocksexplode",
+        "sendCommandFeedback",
+        "showCoordinates",
+        "showDeathMessages",
+        "showTags",
+        "spawnRadius",
+        "tntExplodes"
+      ]
+    },
+    "operator": {
+      "$ref": "./types/operator.json"
+    },
+    "subject": {
+      "$ref": "./types/subject.json"
+    },
+    "value": {
+      "description": "Tests whether a named game rule is active.",
+      "default": true,
+      "type": "boolean",
+      "title": "Value"
+    }
+  },
+  "examples": [
+    {
+      "test": "is_game_rule",
+      "domain": "domobspawning",
+      "value": false
+    }
+  ]
+}
+*/ use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IsGameRule {}

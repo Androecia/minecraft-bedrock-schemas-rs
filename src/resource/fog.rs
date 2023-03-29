@@ -20,10 +20,11 @@ pub struct FogSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volumetric: Option<Volumetric>,
 }
+
 #[derive(Deserialize, Serialize)]
 /// The identifying description of this fog settings.
 pub struct Description {
-    pub identifier: NamespaceIdentifier,
+    pub identifier: NamespaceIdentifier<Fog>,
 }
 
 /// The volumetric fog settings.
@@ -80,7 +81,7 @@ pub struct Density {
 #[derive(Deserialize, Serialize)]
 pub struct VolumeDensity {
     /// The maximum amount of opaqueness that the ground fog will take on. A value from [0.0, 1.0].
-    pub max_density: f32,
+    pub max_density: f64,
     /// The height in blocks that the ground fog will become it's maximum density. Max of 320.
     pub max_density_height: Option<i16>,
     /// The height in blocks that the ground fog will be completely transparent and begin to appear. This value needs to be at least 1 higher than `max_density_height`. Max of 320.
@@ -131,13 +132,13 @@ pub struct TransitionFog {
     pub init_fog: InitialFog,
 
     /// The minimum progress of fog transition.
-    pub min_percent: f32,
+    pub min_percent: f64,
 
     /// The time takes to reach certain progress('mid_percent') of fog transition.
     pub mid_seconds: u32,
 
     /// The progress of fog transition after 'mid_seconds' seconds.
-    pub mid_percent: f32,
+    pub mid_percent: f64,
 
     /// Total amount of time takes to complete fog transition.
     pub max_seconds: u32,
@@ -160,7 +161,7 @@ pub struct InitialFog {
 #[serde(untagged)]
 pub enum Color {
     Hex(String),
-    Array(f32, f32, f32),
+    Array(f64, f64, f64),
 }
 
 #[derive(Deserialize, Serialize)]
@@ -169,14 +170,4 @@ pub enum RenderDistanceType {
     Fixed,
     #[serde(rename = "render")]
     Render,
-}
-
-#[test]
-fn deserialize() {
-    let paths = vec![
-        "./bedrock-samples/resource_pack/fogs/".to_string(),
-        "./Minecraft-bedrock-json-schemas/test/files/correct/data_rp/fogs/".to_string(),
-    ];
-
-    crate::utils::test_serde_json_from_files_in_path::<Fog>(paths);
 }

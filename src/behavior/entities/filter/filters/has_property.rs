@@ -1,0 +1,37 @@
+/* Raw contents of has_property.json That I want to use to make a rust Struct from this Json Schema:
+{
+  "$id": "blockception.minecraft.behavior.entities.filters.has_property",
+  "type": "object",
+  "title": "Has Property",
+  "description": "Tests for the presence of a property of the subject entity.",
+  "required": ["value", "domain"],
+  "examples": [{ "test": "bool_property", "value": true }],
+  "properties": {
+    "test": {
+      "type": "string",
+      "title": "Test Property",
+      "description": "Tests for the presence of a property of the subject entity."
+    },
+    "operator": {
+      "$ref": "./types/operator.json",
+      "description": "(Optionall) The comparison to apply with `value`.",
+      "default": "equals",
+      "title": "Operator"
+    },
+    "subject": {
+      "$ref": "./types/subject.json",
+      "description": "(Optional) The subject of this filter test.",
+      "default": "self",
+      "title": "Subject"
+    },
+    "value": {
+      "title": "Value",
+      "type": "string",
+      "description": "(Required) The property name to look for."
+    }
+  }
+}
+*/ use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HasProperty {}

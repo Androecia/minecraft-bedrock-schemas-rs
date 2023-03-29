@@ -1,0 +1,38 @@
+/* Raw contents of find_underwater_treasure.json That I want to use to make a rust Struct from this Json Schema:
+{
+  "$id": "blockception.minecraft.behavior.entities.minecraft.behavior.find_underwater_treasure",
+  "type": "object",
+  "title": "Find Underwater Treasure",
+  "description": "Allows the mob to move towards the nearest underwater ruin or shipwreck.",
+  "additionalProperties": false,
+  "required": [],
+  "properties": {
+    "priority": {
+      "$ref": "./types/priority.json"
+    },
+    "speed_multiplier": {
+      "$ref": "./types/speed_multiplier.json"
+    },
+    "search_range": {
+      "type": "integer",
+      "default": 0,
+      "description": "The range that the mob will search for a treasure chest within a ruin or shipwreck to move towards.",
+      "title": "Search Range"
+    },
+    "stop_distance": {
+      "type": "number",
+      "default": 2.0,
+      "description": "The distance the mob will move before stopping.",
+      "title": "Stop Distance"
+    }
+  },
+  "examples": [
+    {
+      "search_range": 0,
+      "stop_distance": 2.0
+    }
+  ]
+}*/ use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FindUnderwaterTreasure {}

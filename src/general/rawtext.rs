@@ -146,7 +146,7 @@ The Json Schema to convert to Rust code is:
 }
  */
 
-use crate::general::selection::{WildcardSelection,Selection};
+use crate::general::selection::{Selection, WildcardSelection};
 
 use serde::{Deserialize, Serialize};
 
@@ -159,13 +159,9 @@ pub struct RawText {
 
 impl RawText {
     pub fn new(rawtext: Vec<TextComponent>) -> Self {
-        Self {
-            rawtext,
-        }
+        Self { rawtext }
     }
 }
-
-
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub enum RawTextComponent {
@@ -190,10 +186,7 @@ pub struct TranslationComponent {
 
 impl TranslationComponent {
     pub fn new(translate: String, with: Option<Vec<With>>) -> Self {
-        Self {
-            translate,
-            with,
-        }
+        Self { translate, with }
     }
 }
 
@@ -204,12 +197,6 @@ pub enum With {
     RawText(RawText),
 }
 
-
-
-
-
-
-
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TextComponent {
     // The text to display.
@@ -218,12 +205,9 @@ pub struct TextComponent {
 
 impl TextComponent {
     pub fn new(text: String) -> Self {
-        Self {
-            text,
-        }
+        Self { text }
     }
 }
-
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 
@@ -233,16 +217,3 @@ pub struct ScoreComponent {
     // The scoreboard objective to retrieve the value of.
     pub objective: String,
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

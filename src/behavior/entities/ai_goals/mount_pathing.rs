@@ -1,0 +1,39 @@
+/* Raw contents of mount_pathing.json That I want to use to make a rust Struct from this Json Schema:
+{
+  "$id": "blockception.minecraft.behavior.entities.minecraft.behavior.mount_pathing",
+  "type": "object",
+  "title": "Mount Pathing",
+  "description": "Allows the mob to move around on its own while mounted seeking a target to attack.",
+  "additionalProperties": false,
+  "required": [],
+  "properties": {
+    "priority": {
+      "$ref": "./types/priority.json"
+    },
+    "speed_multiplier": {
+      "$ref": "./types/speed_multiplier.json"
+    },
+    "target_dist": {
+      "type": "number",
+      "default": 0.0,
+      "description": "The distance at which this mob wants to be away from its target.",
+      "title": "Target Dist"
+    },
+    "track_target": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, this mob will chase after the target as long as it's a valid target.",
+      "title": "Track Target"
+    }
+  },
+  "examples": [
+    {
+      "target_dist": 0.0,
+      "track_target": false
+    }
+  ]
+}
+*/ use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MountPathing {}

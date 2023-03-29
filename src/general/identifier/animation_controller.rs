@@ -1,8 +1,8 @@
+use crate::general::identifier::IdentifierError;
+use crate::utils::Validation;
 use regex::Regex;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::fmt;
-use crate::utils::Validation;
-use crate::general::identifier::IdentifierError;
 
 #[derive(Debug, Clone, PartialEq, Hash, Eq)]
 pub struct AnimationControllerIdentifier(String);
@@ -20,7 +20,7 @@ impl TryFrom<String> for AnimationControllerIdentifier {
 
 impl Validation<&str> for AnimationControllerIdentifier {
     fn validate(s: &str) -> bool {
-        let re = Regex::new(r"^controller\\.animation\\.[a-z\\.]+").unwrap();
+        let re = Regex::new(r"^controller\.animation\.[a-z.]+").unwrap();
         re.is_match(&s)
     }
 }

@@ -1,10 +1,180 @@
-use crate::general::identifier::NamespaceIdentifier;
+use crate::general::identifier::namespace::NamespaceIdentifier;
+use serde::{Deserialize, Serialize};
 
-pub struct Event {
-    identifier: NamespaceIdentifier,
+
+/*{
+    "$id": "blockception.minecraft.behavior.entities.events",
+    "type": "object",
+    "title": "Events",
+    "description": "Events for entities.",
+    "additionalProperties": { "$ref": "#/definitions/event_base" },
+    "definitions": {
+        "addremove": {
+            "additionalProperties": false,
+            "title": "Add Or Remove",
+            "description": "The components groups to add or remove.",
+            "type": "object",
+            "examples": [{ "component_groups": ["self:variant1"] }],
+            "properties": {
+                "component_groups": {
+                    "title": "Component Groups",
+                    "description": "The components groups to add or remove.",
+                    "type": "array",
+                    "items": { "type": "string", "description": "A reference to a component group.", "title": "Component Groups" }
+                }
+            }
+        },
+        "event_base": {
+            "additionalProperties": false,
+            "type": "object",
+            "examples": [{}, { "add": { "component_groups": [] } }, { "remove": { "component_groups": [] } }],
+            "defaultSnippets": [
+                { "label": "New Add Event", "body": { "add": { "component_groups": ["$1"] } } },
+                { "label": "New Remove Event", "body": { "remove": { "component_groups": ["$1"] } } },
+                {
+                    "label": "New Random Event",
+                    "body": {
+                        "randomize": [
+                            { "add": { "component_groups": ["$1"] }, "weight": 1 },
+                            { "add": { "component_groups": ["$2"] }, "weight": 1 }
+                        ]
+                    }
+                },
+                {
+                    "label": "New Sequence Events",
+                    "body": {
+                        "sequence": [{ "add": { "component_groups": ["$1"] } }, { "add": { "component_groups": ["$2"] } }]
+                    }
+                }
+            ],
+            "properties": {
+                "filters": { "$ref": "./../filters/filters.json" },
+                "trigger": {
+                    "description": "Triggers additional events.",
+                    "$comment": "UNDOCUMENTED",
+                    "title": "Trigger",
+                    "$ref": "./types/trigger.json"
+                },
+                "add": {
+                    "$ref": "#/definitions/addremove",
+                    "description": "What gets added when the event gets triggered.",
+                    "title": "Add"
+                },
+                "remove": {
+                    "$ref": "#/definitions/addremove",
+                    "description": "What gets removed when the event gets triggered.",
+                    "title": "Remove"
+                },
+                "randomize": {
+                    "type": "array",
+                    "description": "Randomly selects one of the following items based upon their weight and the total weights.",
+                    "title": "Randomize",
+                    "items": {
+                        "description": "Randomly selects one of the following items based upon their weight and the total weights.",
+                        "title": "Randomize",
+                        "examples": [{ "add": { "component_groups": ["foo:example"] }, "weight": 1 }],
+                        "properties": {
+                            "add": {
+                                "$ref": "#/definitions/addremove",
+                                "description": "What gets added when the event gets triggered.",
+                                "title": "Add"
+                            },
+                            "remove": {
+                                "$ref": "#/definitions/addremove",
+                                "description": "What gets removed when the event gets triggered.",
+                                "title": "Remove"
+                            },
+                            "trigger": {
+                                "description": "Triggers additional events.",
+                                "$comment": "UNDOCUMENTED",
+                                "title": "Trigger",
+                                "$ref": "./types/trigger.json"
+                            },
+                            "weight": {
+                                "type": "number",
+                                "default": 1,
+                                "minimum": 1,
+                                "description": "The weight on how likely this section is to trigger.",
+                                "$comment": "UNDOCUMENTED",
+                                "title": "Weight"
+                            }
+                        }
+                    }
+                },
+                "sequence": {
+                    "type": "array",
+                    "description": "A series of filters and components to be added.",
+                    "title": "Sequences",
+                    "items": {
+                        "description": "Filters and components to be added.",
+                        "title": "Sequence",
+                        "type": "object",
+                        "properties": {
+                            "add": {
+                                "$ref": "#/definitions/addremove",
+                                "description": "What gets added when the event gets triggered.",
+                                "title": "Add"
+                            },
+                            "remove": {
+                                "$ref": "#/definitions/addremove",
+                                "description": "What gets removed when the event gets triggered.",
+                                "title": "Remove"
+                            },
+                            "trigger": {
+                                "description": "Triggers additional events.",
+                                "$comment": "UNDOCUMENTED",
+                                "title": "Trigger",
+                                "$ref": "./types/trigger.json"
+                            },
+                            "filters": { "$ref": "./../filters/filters.json" }
+                        }
+                    }
+                },
+                "set_property": {
+                    "title": "Set Property",
+                    "description": "Sets a property on the entity.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "title": "Property",
+                        "type": ["string", "number", "integer", "boolean"]
+                    },
+                    "examples": [
+                        { "example:property": false },
+                        { "example:property": 0 },
+                        { "example:property": 0.0 },
+                        { "example:property": "one" }
+                    ]
+                }
+            }
+        }
+    },
+    "properties": {
+        "minecraft:entity_transformed": {
+            "description": "Event called on an entity that transforms into another entity.",
+            "$ref": "#/definitions/event_base",
+            "title": "Entity Transformed"
+        },
+        "minecraft:entity_born": {
+            "description": "Event called on an entity that is spawned through two entities breeding.",
+            "$ref": "#/definitions/event_base",
+            "title": "Entity Born"
+        },
+        "minecraft:entity_spawned": {
+            "description": "Event called on an entity that is placed in the level.",
+            "$ref": "#/definitions/event_base",
+            "title": "Entity Spawned"
+        },
+        "minecraft:on_prime": {
+            "description": "Event called on an entity whose fuse is lit and is ready to explode.",
+            "$ref": "#/definitions/event_base",
+            "title": "On Prime"
+        }
+    }
 }
-impl Event {
-  pub fn get_identifier(&self) -> &NamespaceIdentifier {
-      &self.identifier
-  }
-}
+ */
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct Event;
+
+
+pub type EventIdentifier = NamespaceIdentifier<Event>;

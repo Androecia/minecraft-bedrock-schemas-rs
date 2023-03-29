@@ -1,0 +1,31 @@
+/* Raw contents of drink_milk.json That I want to use to make a rust Struct from this Json Schema:
+{
+  "$id": "blockception.minecraft.behavior.entities.minecraft.behavior.drink_milk",
+  "type": "object",
+  "title": "Drink Milk",
+  "description": "Allows the mob to drink milk based on specified environment conditions.",
+  "additionalProperties": false,
+  "properties": {
+    "priority": { "$ref": "./types/priority.json" },
+    "cooldown_seconds": {
+      "title": "Cooldown Seconds",
+      "type": "number",
+      "default": 5.0,
+      "description": "Time (in seconds) that the goal is on cooldown before it can be used again."
+    },
+    "filters": {
+      "title": "Filters",
+      "$ref": "../../filters/filters.json",
+      "description": "Conditions that need to be met for the behavior to start."
+    }
+  },
+  "examples": [
+    {
+      "cooldown_seconds": 5.0
+    }
+  ]
+}
+*/ use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DrinkMilk {}

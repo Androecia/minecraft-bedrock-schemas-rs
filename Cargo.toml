@@ -1,11 +1,10 @@
 [package]
-name = "minecraft-bedrock-schemas"
+name = "minecraft_bedrock_schemas"
 version = "0.1.0"
 edition = "2021"
 #build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 
 
 [lib]
@@ -16,10 +15,13 @@ path = "src/lib.rs"
 
 
 [dependencies]
+dotenvy = "0.15.6"
+json_comments = "0.2.1"
 regex = "1.7.1"
 regexp = "0.3.2"
 serde = { version = "1.0.152", features = ["serde_derive"] }
 serde_json = "1.0.93"
+text-diff = "0.4.0"
 walkdir = "2.3.2"
 
 #[build-dependencies]

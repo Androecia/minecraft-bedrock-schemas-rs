@@ -1,0 +1,35 @@
+/* Raw contents of charge_attack.json That I want to use to make a rust Struct from this Json Schema:
+{
+  "$id": "blockception.minecraft.behavior.entities.minecraft.behavior.charge_attack",
+  "additionalProperties": false,
+  "type": "object",
+  "title": "Charge Attack",
+  "description": "Allows this entity to damage a target by using a running attack.",
+  "required": [],
+  "properties": {
+    "priority": { "$ref": "types/priority.json" },
+    "speed_multiplier": { "$ref": "types/speed_multiplier.json" },
+    "max_distance": {
+      "title": "Max Distance",
+      "type": "number",
+      "default": 3,
+      "description": "A charge attack cannot start if the entity is farther than this distance to the target."
+    },
+    "min_distance": {
+      "title": "Min Distance",
+      "type": "number",
+      "default": 2,
+      "description": "A charge attack cannot start if the entity is closer than this distance to the target."
+    },
+    "success_rate": {
+      "title": "Success Rate",
+      "type": "number",
+      "default": 0.1428,
+      "description": "Percent chance this entity will start a charge attack, if not already attacking (1.0 = 100%)"
+    }
+  }
+}
+*/ use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ChargeAttack {}
