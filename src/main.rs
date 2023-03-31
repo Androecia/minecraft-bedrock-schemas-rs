@@ -1,5 +1,5 @@
 
-use schemars::schema::{RootSchema};
+use schemars::schema::{RootSchema,Schema};
 
 use serde::{Serialize, Deserialize};
 
@@ -252,7 +252,7 @@ fn main () {
 
 
 
-        let  schema: RootSchema = serde_json::from_value(json.clone()).unwrap();
+        let  schema: Schema = serde_json::from_value(json.clone()).unwrap();
 
         println!("File: {:?}", file.source);
 
@@ -263,26 +263,17 @@ fn main () {
 }
 
 use syn;
+use typify::{TypeSpace,TypeSpaceSettings};
 
-fn process_schema(root: RootSchema) {
-
-    let mut schema = root.schema;
-
-    let definitions = root.definitions;
-
-    let mut metadata = schema.metadata.unwrap();
+fn process_schema(schema: Schema) {
 
 
-
-    if metadata.id.is_some() {
-        println!("Schema ID: {:?}", &metadata.id.unwrap());
-    }
+    let set = TypeSpaceSettings::default();
 
 
+    let mut ts =  TypeSpace::new(&set);
 
-
-
-
+    ts.add_type(&schema);
 
 
 
